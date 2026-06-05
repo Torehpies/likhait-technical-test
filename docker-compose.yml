@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   db:
     image: mysql:8.0
@@ -50,7 +52,13 @@ services:
     volumes:
       - ./backend:/rails
       - backend_gems:/usr/local/bundle
-    command: ./bin/rails server -b 0.0.0.0
+    command: >
+      sh -c "
+        bundle install &&
+        rails db:migrate &&
+        rails db:seed &&
+        rails server -b 0.0.0.0
+      "
     networks:
       - expense_network
 
